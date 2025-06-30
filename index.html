@@ -2,39 +2,83 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>i wonder when it will end</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PyScript Button Fix</title>
 
-    <link rel="stylesheet" href="https://pyscript.net/releases/2025.5.1/core.css">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2025.5.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2025.5.1/core.js"></script>
 
     <style>
       h1 {
-        color: #2b0000;
+        color: #000000;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
       }
+
       .cdiv {
         margin: auto;
         width: 50%;
         text-align: center;
       }
-      input {
-        padding: 8px;
-        font-size: 16px;
-        width: 80%;
+
+      .trashButtons {
+        background-color: gray;
+        border: none;
+        padding: 16px 32px;
+        margin: 10px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: white;
+        cursor: pointer;
+      }
+      .invDiv {
+        position:fixed;
+        top: 0;
+        right: 0;
+          width: 20vw; 
+        height: 100vh;
+        background-color: #f4f4f4;
+        border-left: 2px solid #ccc;
+        padding: 15px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        overflow-y: auto;
+        box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
+
       }
     </style>
   </head>
+
   <body>
     <div class="cdiv">
-      <h1>IDC about style rn (RPG)</h1>
-      <input id="actionInput" placeholder="type here">
-      <h1 id="gameText">Welcome to IDCRPG! game loading...</h1>
+      <h1>IDC about style rn</h1>
+      <h1 id="gameText">game loading...</h1>
+      <button class="trashButtons" id="button1">Fight</button>
+      <button class="trashButtons" id="button2">Collect</button>
+      <button class="trashButtons" id="button3">Eat</button>
+    </div>
+
+    <div class="invDiv">
+      <h1>Inventory</h1>
     </div>
 
     <py-script>
-from js import document
-document.getElementById("gameText").innerText = "What do you want to do?"
+      from js import document
+      from pyodide.ffi import create_proxy
+      document.getElementById("gameText").innerText = "What do you want to do?"
+      actionStatus = "idle"
+      weapon = "fists"
+
+      def bAction1(event):
+        global actionStatus
+        if actionStatus == "idle":
+          actionStatus = "fighting"
+          document.getElementById("gameText").innerText = "You started a fight with an angry snowman."
+          document.getElementById("button1").innerText = "Attack"
+          document.getElementById("button2").innerText = "Run"
+          document.getElementById("button3").innerText = "Befriend"
+
+      proxy1 = create_proxy(bAction1)
+
+      document.getElementById("button1").addEventListener("click", proxy1)
+      document.getElementById("button2").addEventListener("click", ) #WORK ON THIS PLZ
 
     </py-script>
   </body>
